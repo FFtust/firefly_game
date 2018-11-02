@@ -65,9 +65,9 @@ class sprite_create():
         p_y_d = 0
         self.ope_sema = threading.Lock()
         self.sprite_info = []
-        self.sprite_current = [0] * FACE_COLUMN
+        self.sprite_current = [[None] * FACE_COLUMN] * FACE_ROW
 
-        for i in range(FACE_COLUMN):
+        for i in range(FACE_ROW):
             dat = int(sp_info[i * 2 :  (i + 1) * 2], 16)
             self.sprite_info.append(dat)
             if count == 0 and dat != 0:

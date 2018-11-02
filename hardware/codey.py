@@ -150,20 +150,20 @@ def __speaker_get_tempo():
         return ret
 
 def __speaker_play_melody(sound_name, wait = False, off_t = 0.05):
-    codey_adapter.write_async("speaker.play_melody", "('%s', %s, %s)" %(sound_name, wait, off_t))
+    codey_adapter.write_async("speaker.play_melody", "('%s', %s, %s)" %(sound_name, wait, off_t), update_flag = True)
 
 def __speaker_play_melody_until_done(sound_name, wait = True, off_t = 0.05):
-    codey_adapter.write_async("speaker.play_melody_until_done", "('%s', %s, %s)" %(sound_name, wait, off_t))
+    codey_adapter.write_async("speaker.play_melody_until_done", "('%s', %s, %s)" %(sound_name, wait, off_t), update_flag = True)
 
 def __speaker_play_note(note, beat = None):
-    codey_adapter.write_async("speaker.play_note", "(%s, %s)" %(note, beat))
+    codey_adapter.write_async("speaker.play_note", "(%s, %s)" %(note, beat), update_flag = True)
 
 
 def __speaker_play_tone(frequency, time_ms = None):
-    codey_adapter.write_async("speaker.play_tone", "(%s, %s)" %(frequency, time_ms))
+    codey_adapter.write_async("speaker.play_tone", "(%s, %s)" %(frequency, time_ms), update_flag = True)
 
 def __speaker_rest(beat):
-    codey_adapter.write_async("speaker.play_tone", "(%s)" %(beat))
+    codey_adapter.write_async("speaker.play_tone", "(%s)" %(beat), update_flag = True)
 
 # motion sensor
 def __motion_sensor_get_roll():
@@ -188,14 +188,17 @@ def __motion_sensor_get_yaw():
         return ret
 
 def __motion_sensor_get_rotation(axis):
-    ret = codey_adapter.read_async("motion_sensor.get_rotation", '(%s)' %(axis, ))
+    ret = codey_adapter.read_async("motion_sensor.get_rotation", '("%s")' %(axis, ))
     if ret == None:
         return 0
     else:
         return ret
 
 def __motion_sensor_reset_rotation(axis = "all"):
-    codey_adapter.write_async("motion_sensor.reset_rotation", '(%s)' %(axis, ))
+    if not (axis in  index_dict):
+        return 0
+
+    codey_adapter.write_async("motion_sensor.reset_rotation", '("%s")' %(axis, ))
 
 
 def __motion_sensor_is_shaked():
@@ -260,14 +263,22 @@ def __motion_sensor_is_upright():
         return ret
 
 def __motion_sensor_get_acceleration(axis):
-    ret = codey_adapter.read_async("motion_sensor.get_acceleration", '(%s)' %(axis, ))
+    index_dict = {'x':1, 'y':2, 'z':3}
+    if not (axis in  index_dict):
+        return 0
+
+    ret = codey_adapter.read_async("motion_sensor.get_acceleration__" + + str(index_dict[axis]), '("%s")' %(axis, ))
     if ret == None:
         return 0
     else:
         return ret
 
 def __motion_sensor_get_gyroscope(axis):
-    ret = codey_adapter.read_async("motion_sensor.get_gyroscope", '(%s)' %(axis, ))
+    index_dict = {'x':1, 'y':2, 'z':3}
+    if not (axis in  index_dict):
+        return 0
+
+    ret = codey_adapter.read_async("motion_sensor.get_gyroscope__" + str(index_dict[axis]), '("%s")' %(axis, ))
     if ret == None:
         return 0
     else:
@@ -351,7 +362,6 @@ motion_sensor.get_gyroscope = __motion_sensor_get_gyroscope
 # do initialize
 __run_into_online_mode()
 __import_codey()
-
 # frame = create_frame(0x01, "subscribe.add_item(1, codey.button_a.is_pressed, ())")   
 # common_link.phy.write(frame)
 # frame = create_frame(0x01, "subscribe.add_item(2, codey.button_b.is_pressed, ())")   

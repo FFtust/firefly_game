@@ -58,9 +58,9 @@ class exec_script_hash(object):
         else:
             return None
 
-    def update_para(self, script, para):
+    def update_para(self, script, para, update_flag = False):
         if script in self.script_hash:
-            if self.script_hash[script][1] != para:
+            if update_flag or self.script_hash[script][1] != para:
                 self.script_hash[script][1] = para
                 self.script_hash[script][2] = True
 
@@ -76,7 +76,7 @@ class exec_script_hash(object):
 
                 # print('subscribe.up_para(%s)' %(para_dict, ))
                 if para_dict != {}:
-                    self.common_link.phy.write(frame_package.create_frame(0x01, 'subscribe.up_para(%s)' %(str(para_dict), )))
+                    self.common_link.phy.write(frame_package.create_frame(0x01, ('subscribe.up_para(%s)' %(str(para_dict), )).replace(' ','')))
             time.sleep(self.interval)
 
     def start(self):
@@ -116,8 +116,9 @@ class adapter(object):
     def write_sync(self, script):
         return
 
-    def write_async(self, script, para = None, temp = None):
+    def write_async(self, script, para = None, update_flag = False):
         para = para.replace(' ','')
+
         t_script = script
         if script[-3: -1] == '__': 
             script = script[:-3]
@@ -131,38 +132,49 @@ class adapter(object):
             hash_id = self.exec_script_hash.get_hash(t_script)
             if not hash_id:
                 hash_id  = self.exec_script_hash.register(t_script, eval(para))
-
-                if temp != None:
-                    if para == None:
-                        frame = frame_package.create_frame(0x01, "subscribe.add_exec_item(%d, %s, ())" %(hash_id, script))
-                    else:
-                        frame = frame_package.create_frame(0x01, "subscribe.add_exec_item(%d, %s, %s" %(hash_id, script, para))
-
+                if para == None:
+                    frame = frame_package.create_frame(0x01, "subscribe.add_exec_item(%d, %s, ())" %(hash_id, script))
                 else:
-                    if para == None:
-                        frame = frame_package.create_frame(0x01, "subscribe.add_exec_item(%d, %s, ())" %(hash_id, script))
-                    else:
-                        # print("subscribe.add_exec_item(%d, %s, %s)" %(hash_id, script, para))
-                        frame = frame_package.create_frame(0x01, "subscribe.add_exec_item(%d, %s, %s)" %(hash_id, script, para))
+                    print("subscribe.add_exec_item(%d, %s, %s)" %(hash_id, script, para))
+                    frame = frame_package.create_frame(0x01, "subscribe.add_exec_item(%d, %s, %s)" %(hash_id, script, para))
 
                 self.common_link.phy.write(frame)
-                time.sleep(0.5)
+                time.sleep(0.2)
             else:
-                self.exec_script_hash.update_para(t_script, eval(para))
+                self.exec_script_hash.update_para(t_script, eval(para), update_flag)
 
+    def write_imidiate_script(self, script, para = None, temp = None):
+        para = para.replace(' ','')
+
+        t_script = script
+        if script[-3: -1] == '__': 
+            script = script[:-3]
+
+        if para == None:
+            self.common_link.phy.write(frame_package.create_frame(0x00, script + '()'))
+        else:
+            # print("write_imidiate_script: %s" %(script + para))
+            self.common_link.phy.write(frame_package.create_frame(0x00, script + para))
 
 
     def read_sync(self, script):
         return
 
     def read_async(self, script, para = None):
-        hash_id = self.script_hash.get_hash(script)
+        para = para.replace(' ','')
+
+        t_script = script
+        if script[-3: -1] == '__': 
+            script = script[:-3]
+
+        hash_id = self.script_hash.get_hash(t_script)
         if not hash_id:
-            hash_id  = self.script_hash.register(script)
+            hash_id  = self.script_hash.register(t_script)
             if para == None:
                 # print("subscribe.add_item(%d, codey.%s, ())" %(hash_id, script))
                 frame = frame_package.create_frame(0x01, "subscribe.add_item(%d, %s, ())" %(hash_id, script))
             else:
+                print("subscribe.add_item(%d, %s, %s)" %(hash_id, script, para))
                 frame = frame_package.create_frame(0x01, "subscribe.add_item(%d, %s, %s)" %(hash_id, script, para))
 
             self.common_link.phy.write(frame)

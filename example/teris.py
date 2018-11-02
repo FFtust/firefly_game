@@ -1,9 +1,9 @@
-from game import game_base
-from game import sprite_create
-from game import *
-from game_controller import *
+from application.game import game_base
+from application.game import sprite_create
+from application.game import *
+from application.game_controller import *
 
-import codey 
+import hardware.codey as codey 
 import time
 import random
 
@@ -117,6 +117,7 @@ def work():
         index = random.randint(0, sprite_num - 1)
         current_script = sprite_create(sprites[index])
         game.add_sprite(current_script)
+        current_script.left(2)
         if game.background_collision_check(current_script):
             game.del_sprite(current_script)
             current_script = None

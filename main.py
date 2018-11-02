@@ -117,6 +117,7 @@ def work():
         index = random.randint(0, sprite_num - 1)
         current_script = sprite_create(sprites[index])
         game.add_sprite(current_script)
+        current_script.left(2)
         if game.background_collision_check(current_script):
             game.del_sprite(current_script)
             current_script = None
