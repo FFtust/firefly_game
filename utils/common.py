@@ -169,3 +169,40 @@ def get_except_by_str(except_str):
 
     elif except_str == "UserWarning":
         return UserWarning
+
+# bytes switch
+def float_to_byte_4(data): 
+    float_bytes = pack('f', data)
+    return bytearray(float_bytes)
+
+def int_to_byte_4(data):
+    if type(data) == float:
+        data = int(data)
+    int_bytes = data.to_bytes(4, "little")
+    return bytearray(int_bytes)
+
+def int_to_byte_2(data):
+    if type(data) == float:
+        data = int(data)
+    int_bytes = data.to_bytes(2, "little")
+    return bytearray(int_bytes)
+
+def byte_2_to_short(data):
+    if len(data) != 2:
+        return None
+    result = unpack('h', bytearray(data))
+    result = result[0]
+    return bytearray(result)
+
+def byte_4_to_float(data): 
+    float_bytes = unpack('f', bytearray(data))
+    result = result[0]
+    return bytearray(result)
+
+def byte_4_to_int(data):
+    if len(data) != 4:
+        return None
+    result = unpack('l', bytearray(data))
+    result = result[0]
+    return bytearray(result)
+

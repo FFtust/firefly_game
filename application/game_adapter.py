@@ -6,18 +6,16 @@ import hardware.neurons as neurons
 # game cinfig
 FACE_ROW = 8
 FACE_COLUMN = 16
-REFRESH_INTERVAL = 80
+REFRESH_INTERVAL = 50
 SPRITE_NUM_MAX = 20
 
 # function need to be complement here
 def screen_update_hardware(face):
-    temp_face = [0] * FACE_ROW
-    for i in range(FACE_ROW):
+    temp_face = [0] * FACE_COLUMN
+    for i in range(FACE_COLUMN):
         temp_face[i] = face_info_invert(face[i])
     codey.display.show_image(para_switch(temp_face))
     show_neurons_image(face)
-
-
 
 def para_join(x, y):
     if type(x) == int:
@@ -70,7 +68,7 @@ def show_neurons_image(image):
 
     neurons.led_panel.show_image(face1, 1)
     neurons.led_panel.show_image(face2, 2)
-    neurons.led_panel.show_image(face2, 3)
+    # neurons.led_panel.show_image(face2, 3)
 
 
 # this is for the mismatching axis definition

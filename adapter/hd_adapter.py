@@ -8,7 +8,8 @@ from adapter.data_sync import hardware_data
 COM_PORT = "COM29"
 COM_BAUDRATE = 115200
 
-WRITE_BUFFER_ENABLE = True
+WRITE_BUFFER_ENABLE = False
+WRITE_UPDATE_INTERVAL = 0.025
 
 class script_hash(object):
     def __init__(self):
@@ -39,7 +40,7 @@ class exec_script_hash(object):
     def __init__(self, common_link):
         self.script_hash = {}
         self.danymic_number = 1
-        self.interval = 0.1
+        self.interval = WRITE_UPDATE_INTERVAL
         self.common_link = common_link
 
     def register(self, script, para):
@@ -85,7 +86,6 @@ class exec_script_hash(object):
 
 
 class adapter(object):
-
     def __init__(self, phy_para = [COM_PORT], phy_type = 'serial'):
         self.script_hash = script_hash()
 
@@ -117,7 +117,8 @@ class adapter(object):
         return
 
     def write_async(self, script, para = None, update_flag = False):
-        para = para.replace(' ','')
+        if para != None:
+            para = para.replace(' ','')
 
         t_script = script
         if script[-3: -1] == '__': 
@@ -144,7 +145,8 @@ class adapter(object):
                 self.exec_script_hash.update_para(t_script, eval(para), update_flag)
 
     def write_imidiate_script(self, script, para = None, temp = None):
-        para = para.replace(' ','')
+        if para != None:
+            para = para.replace(' ','')
 
         t_script = script
         if script[-3: -1] == '__': 
@@ -155,13 +157,15 @@ class adapter(object):
         else:
             # print("write_imidiate_script: %s" %(script + para))
             self.common_link.phy.write(frame_package.create_frame(0x00, script + para))
+        time.sleep(0.025)
 
 
     def read_sync(self, script):
         return
 
     def read_async(self, script, para = None):
-        para = para.replace(' ','')
+        if para != None:
+            para = para.replace(' ','')
 
         t_script = script
         if script[-3: -1] == '__': 

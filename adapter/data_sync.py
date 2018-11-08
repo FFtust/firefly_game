@@ -1,5 +1,7 @@
 import time
 import threading
+from utils.common import *
+from config import BIGSTRING_ENABLE
 
 # config
 DATA_UPDATE_SYNC_LOCK_ENABLE = False
@@ -22,7 +24,10 @@ class hardware_data():
         self.sensor_data = {}
     
     def data_parse(self, frame):
-        json_item = eval(str(frame[1 : -1], "utf8"))
+        if BIGSTRING_ENABLE:
+            json_item = eval(str(frame[3 :], "utf8"))
+        else:
+            json_item = eval(str(frame[1 : -1], "utf8"))
         # print(json_item)
         for key in json_item:
             if key in self.sensor_data:

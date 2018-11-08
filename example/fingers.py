@@ -1,10 +1,9 @@
 # # coding:utf-8
-from game import game_base
-from game import sprite_create
-from game import *
-from game_controller import *
+from application.game import *
+from application.game_controller import *
 import time
 import random
+import hardware.codey as codey
 
 game = game_base()
 # 两个角色 为两个小点
@@ -97,8 +96,8 @@ def on_start():
     print("game start")
     while True:
         speed_control()
-        move_control()
-        # move_control_2()
+        # move_control()
+        move_control_2()
         if speed != 0:
             if count % speed == 0:
                 background_control()
@@ -107,7 +106,7 @@ def on_start():
         # 如果角色碰到背景， 则游戏结束
         if game.background_collision_check(right_h) or game.background_collision_check(left_h):
             # game.game_over()
-            # codey.speaker.play_melody('sad.wav')
+            codey.speaker.play_melody('sad.wav')
             game_deinit()
             time.sleep(2)
             # break
