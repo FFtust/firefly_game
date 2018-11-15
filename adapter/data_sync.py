@@ -18,7 +18,6 @@ class subscribe_item_structure():
         if DATA_UPDATE_SYNC_LOCK_ENABLE:
             self.value_update_sync_lock = threading.Lock()
 
-
 class hardware_data():
     def __init__(self):
         self.sensor_data = {}

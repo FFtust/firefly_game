@@ -13,7 +13,7 @@ while True:
         atombit.led.show_all(100, 0, 0)
     else:
         atombit.led.show_all(0, 0, 0)
-
+    
     # print(atombit.led.show_all(atombit.microphone.get_loudness(), 0 , 0))
     # print(atombit.touchpad1.get_value())
     # else:
