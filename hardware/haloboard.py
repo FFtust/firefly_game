@@ -3,12 +3,13 @@ import time
 from utils.common import *
 import adapter.hd_adapter as hd_adapter
 
-haloboard_adapter = hd_adapter.adapter()
-
 # system process
-def __run_into_online_mode():
+def __run_into_online_mode(t = None):
     haloboard_adapter.write_bytes_directly(bytearray([0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x01, 0x0e, 0xf4]))
-    time.sleep(3)
+    if t == None:
+        time.sleep(2)
+    else:
+        time.sleep(t)
 
 # define online apis, each name of the apis is the same with offline's
 class api_format():
@@ -173,7 +174,7 @@ def __wifi_is_connected():
 
 # speech recognition    
 def __speech_recognition_start(server = 0, language = 0, time = 5):
-    haloboard_adapter.write_imidiate_script("speech_recognition.start", "(%d, %d, %d)" %(server, language, time))
+    haloboard_adapter.write_imidiate_script("speech_recognition.start", "(%s, %s, %s)" %(server, language, time))
 
 
 def __speech_recognition_get_result_code():
@@ -184,34 +185,94 @@ def __speech_recognition_get_result_code():
         return ret
 
 # # motion sensor
-# def __motion_sensor_get_acceleration(axis):
-    
+def __motion_sensor_get_acceleration(axis):
+    ret = haloboard_adapter.read_async("motion_sensor.get_acceleration", "('%s')" %(axis, ))
+    if ret == None:
+        return 0
+    else:
+        return ret
 
-# get_gyroscope(axis):
+def __motion_sensor_get_gyroscope(axis):
+    ret = haloboard_adapter.read_async("motion_sensor.get_gyroscope", "('%s')" %(axis, ))
+    if ret == None:
+        return 0
+    else:
+        return ret
 
-# get_rotation(axis):
+def __motion_sensor_get_rotation(axis):
+    ret = haloboard_adapter.read_async("motion_sensor.get_rotation", "('%s')" %(axis, ))
+    if ret == None:
+        return 0
+    else:
+        return ret
 
-# reset_rotation(axis = "all"):
+def __motion_sensor_reset_rotation(axis = "all"):
+    ret = haloboard_adapter.write_imidiate_script("motion_sensor.reset_rotation", "('%s')" %(axis, ))
 
-# is_shaked():
-    
-# get_shake_strength():
- 
-# is_tilted_left():
+def __motion_sensor_is_shaked():
+    ret = haloboard_adapter.read_async("motion_sensor.get_rotation")
+    if ret == None:
+        return False
+    else:
+        return ret
 
-# is_tilted_right():
+def __motion_sensor_get_shake_strength():
+    ret = haloboard_adapter.read_async("motion_sensor.shake_strength")
+    if ret == None:
+        return 0
+    else:
+        return ret
 
-# is_arrow_up():
+def __motion_sensor_is_tilted_left():
+    ret = haloboard_adapter.read_async("motion_sensor.is_tilted_left")
+    if ret == None:
+        return False
+    else:
+        return ret
 
-# is_arrow_down():
+def __motion_sensor_is_tilted_right():
+    ret = haloboard_adapter.read_async("motion_sensor.is_tilted_right")
+    if ret == None:
+        return False
+    else:
+        return ret
+def __motion_sensor_is_arrow_up():
+    ret = haloboard_adapter.read_async("motion_sensor.is_arrow_up")
+    if ret == None:
+        return False
+    else:
+        return ret
 
-# get_pitch():
+def __motion_sensor_is_arrow_down():
+    ret = haloboard_adapter.read_async("motion_sensor.is_arrow_down")
+    if ret == None:
+        return False
+    else:
+        return ret
 
-# get_roll():
+def __motion_sensor_get_pitch():
+    ret = haloboard_adapter.read_async("motion_sensor.get_pitch")
+    if ret == None:
+        return 0
+    else:
+        return ret
 
-# get_yaw():
+def __motion_sensor_get_roll():
+    ret = haloboard_adapter.read_async("motion_sensor.get_roll")
+    if ret == None:
+        return 0
+    else:
+        return ret
 
-# get_gesture()
+def __motion_sensor_get_yaw():
+    ret = haloboard_adapter.read_async("motion_sensor.get_yaw")
+    if ret == None:
+        return 0
+    else:
+        return ret
+
+def __motion_sensor_get_gesture():
+    return ''
 
 
 # api rename
@@ -259,35 +320,26 @@ microphone = api_format()
 microphone.get_loudness = __mic_get_loudness
 
 motion_sensor = api_format()
-# motion_sensor.get_acceleration(axis):
 
-# get_gyroscope(axis):
+motion_sensor.get_acceleration = __motion_sensor_get_acceleration
+motion_sensor.get_gyroscope = __motion_sensor_get_gyroscope
+motion_sensor.get_rotation = __motion_sensor_get_rotation
+motion_sensor.reset_rotation = __motion_sensor_reset_rotation
+motion_sensor.is_shaked = __motion_sensor_is_shaked
+motion_sensor.get_shake_strength = __motion_sensor_get_shake_strength
+motion_sensor.is_tilted_left = __motion_sensor_is_tilted_left
+motion_sensor.is_tilted_right = __motion_sensor_is_tilted_right
+motion_sensor.is_arrow_up = __motion_sensor_is_arrow_up
+motion_sensor.is_arrow_down = __motion_sensor_is_arrow_down
+motion_sensor.get_pitch = __motion_sensor_get_pitch
+motion_sensor.get_roll = __motion_sensor_get_roll
+motion_sensor.get_yaw = __motion_sensor_get_yaw
+motion_sensor.get_gesture = __motion_sensor_get_gesture
 
-# get_rotation(axis):
-
-# reset_rotation(axis = "all"):
-
-# is_shaked():
-    
-# get_shake_strength():
- 
-# is_tilted_left():
-
-# is_tilted_right():
-
-# is_arrow_up():
-
-# is_arrow_down():
-
-# get_pitch():
-
-# get_roll():
-
-# get_yaw():
-
-# get_gesture()
-
+haloboard_adapter = None
 # do initialize
-__run_into_online_mode()
-__import_firefly()
+def start(port):
+    haloboard_adapter = hd_adapter.adapter([port])
+    __run_into_online_mode()
+    __import_firefly()
 

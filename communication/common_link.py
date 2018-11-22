@@ -169,9 +169,7 @@ class common_link():
             ret = self.recv()
             if ret:
                 for item in ret:
-                    print("****", item)
                     if item[0] in self.protocol_cb:
-                        print("****###")
                         self.protocol_cb[item[0]](item[1:])
     def start(self):
         self.thread_work = threading.Thread(target = self.work, args = ())

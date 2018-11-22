@@ -40,7 +40,7 @@ class hardware_data():
     def data_parse(self, frame):
         json_item = eval(get_json_string(frame))
  
-        print(frame, json_item)
+        # print(frame, json_item)
         for key in json_item:
             if key in self.sensor_data:
                 self.sensor_data[key].value = json_item[key]
