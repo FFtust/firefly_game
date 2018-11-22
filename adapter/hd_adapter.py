@@ -5,11 +5,18 @@ import communication.common_link as common_link
 import adapter.frame_package as frame_package
 from adapter.data_sync import hardware_data
 
-COM_PORT = "COM29"
+COM_PORT = "COM28"
 COM_BAUDRATE = 115200
 
 WRITE_BUFFER_ENABLE = False
 WRITE_UPDATE_INTERVAL = 0.025
+
+def sync_delay(t = None):
+    import time
+    if t == None:
+        time.sleep(0.025)
+    else:
+        time.sleep(t)
 
 class script_hash(object):
     def __init__(self):
@@ -112,11 +119,16 @@ class adapter(object):
 
     def write_str_directly(self, script):
         self.common_link.phy.write(frame_package.create_frame(0x00, script))
+        sync_delay()
 
     def write_sync(self, script):
+        sync_delay()
+
         return
 
     def write_async(self, script, para = None, update_flag = False):
+        sync_delay()
+
         if para != None:
             para = para.replace(' ','')
 
@@ -145,6 +157,7 @@ class adapter(object):
                 self.exec_script_hash.update_para(t_script, eval(para), update_flag)
 
     def write_imidiate_script(self, script, para = None, temp = None):
+        sync_delay()
         if para != None:
             para = para.replace(' ','')
 
@@ -157,13 +170,14 @@ class adapter(object):
         else:
             # print("write_imidiate_script: %s" %(script + para))
             self.common_link.phy.write(frame_package.create_frame(0x00, script + para))
-        time.sleep(0.025)
-
 
     def read_sync(self, script):
+        sync_delay()
         return
 
     def read_async(self, script, para = None):
+        sync_delay()
+
         if para != None:
             para = para.replace(' ','')
 
@@ -192,4 +206,6 @@ class adapter(object):
 
     # special application
     def write_bytes_directly(self, frame):
+        sync_delay()
+
         self.common_link.phy.write(frame)

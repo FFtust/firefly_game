@@ -1,7 +1,7 @@
 import time
 import threading
 from utils.common import *
-from config import BIGSTRING_ENABLE
+from config import *
 
 # config
 DATA_UPDATE_SYNC_LOCK_ENABLE = False
@@ -18,16 +18,29 @@ class subscribe_item_structure():
         if DATA_UPDATE_SYNC_LOCK_ENABLE:
             self.value_update_sync_lock = threading.Lock()
 
+def get_json_string(frame):
+    if SERVICE_ID_ENABLE:
+        service_len = 1
+    else:
+        service_len = 0
+
+    if SCRIPT_PACKAGE_TYPE == SCRIPT_PACKAGE_TYPE_BIGSTRING:
+        json_string = str(frame[2 + service_len :], "utf8")
+    elif SCRIPT_PACKAGE_TYPE == SCRIPT_PACKAGE_TYPE_STRING:
+        json_string = str(frame[1 + service_len :], "utf8")
+    elif SCRIPT_PACKAGE_TYPE == SCRIPT_PACKAGE_TYPE_STRING0:
+        json_string = str(frame[service_len : -1], "utf8")
+
+    return json_string
+
 class hardware_data():
     def __init__(self):
         self.sensor_data = {}
     
     def data_parse(self, frame):
-        if BIGSTRING_ENABLE:
-            json_item = eval(str(frame[3 :], "utf8"))
-        else:
-            json_item = eval(str(frame[1 : -1], "utf8"))
-        # print(json_item)
+        json_item = eval(get_json_string(frame))
+ 
+        print(frame, json_item)
         for key in json_item:
             if key in self.sensor_data:
                 self.sensor_data[key].value = json_item[key]

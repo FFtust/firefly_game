@@ -11,7 +11,7 @@ class phy_uart():
         self.ser = None
         self.com_port = port
         self.baudrate = baudrate
-        self.ser = serial.Serial(None, self.baudrate, timeout = 1)
+        self.ser = serial.Serial(None, self.baudrate, timeout = 0.2)
         self.write_lock = threading.Lock()
 
     def __del__(self):
@@ -70,6 +70,8 @@ class common_link():
 
     # Input a stream data, split stream to frame and save in frame_list
     def fsm(self, stream):
+        # this variable indicate the number of datas should be read next time
+        ret_num = 1
         for c in stream:
             receive_frame = None
 
@@ -99,6 +101,10 @@ class common_link():
                 if (head_checksum == self.head_checksum):
                     self.state = self.S_DATA
                     self.recv_len = 0
+                    # head check successed, read the reserved datas
+                    # 2 = checksum(1) + 0xF4(1)
+                    ret_num = self.len + 2
+
                 else:
                     self.state = self.S_HEAD
 
@@ -135,13 +141,16 @@ class common_link():
         if self.recv_bin_sem.locked():
              self.recv_bin_sem.release()
 
+        return ret_num
+
     def work(self):
         self.phy.open()
+        read_num = 1
         while True:
-            stream = self.phy.read()
+            stream = self.phy.read(read_num)
             if stream:
                 debug_print("read data is", stream)
-                self.fsm(stream)
+                read_num = self.fsm(stream)
 
     def recv(self):
         self.recv_bin_sem.acquire()
@@ -160,7 +169,9 @@ class common_link():
             ret = self.recv()
             if ret:
                 for item in ret:
+                    print("****", item)
                     if item[0] in self.protocol_cb:
+                        print("****###")
                         self.protocol_cb[item[0]](item[1:])
     def start(self):
         self.thread_work = threading.Thread(target = self.work, args = ())

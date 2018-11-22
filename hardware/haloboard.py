@@ -3,11 +3,11 @@ import time
 from utils.common import *
 import adapter.hd_adapter as hd_adapter
 
-atombit_adapter = hd_adapter.adapter()
+haloboard_adapter = hd_adapter.adapter()
 
 # system process
 def __run_into_online_mode():
-    atombit_adapter.write_bytes_directly(bytearray([0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x01, 0x0e, 0xf4]))
+    haloboard_adapter.write_bytes_directly(bytearray([0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x01, 0x0e, 0xf4]))
     time.sleep(3)
 
 # define online apis, each name of the apis is the same with offline's
@@ -22,11 +22,11 @@ class api_format():
 
 # import firefly
 def __import_firefly():
-    atombit_adapter.write_str_directly("from atombit import *")
+    haloboard_adapter.write_str_directly("from haloboard import *")
 
 # button
 def __button_is_pressed():
-    ret = atombit_adapter.read_async("button.is_pressed")
+    ret = haloboard_adapter.read_async("button.is_pressed")
     if ret == None:
         return False
     else:
@@ -34,121 +34,121 @@ def __button_is_pressed():
 
 #led
 def __led_show_all(r, g, b):
-    # atombit_adapter.write_async("led.show_all", "(%s, %s, %s)" %(r, g, b))
-    atombit_adapter.write_imidiate_script("led.show_all", "(%s, %s, %s)" %(r, g, b))
+    # haloboard_adapter.write_async("led.show_all", "(%s, %s, %s)" %(r, g, b))
+    haloboard_adapter.write_imidiate_script("led.show_all", "(%s, %s, %s)" %(r, g, b))
 
 def __led_show_single(index, r , g, b):
-    # atombit_adapter.write_async(("led.show_single", "(%s, %s, %s, %s)" %(index, r, g, b)))
-    atombit_adapter.write_imidiate_script(("led.show_single", "(%s, %s, %s, %s)" %(index, r, g, b)))
+    # haloboard_adapter.write_async(("led.show_single", "(%s, %s, %s, %s)" %(index, r, g, b)))
+    haloboard_adapter.write_imidiate_script(("led.show_single", "(%s, %s, %s, %s)" %(index, r, g, b)))
 
 def __led_off_all():
-    # atombit_adapter.write_async("led.off_all")
-    atombit_adapter.write_imidiate_script("led.off_all")
+    # haloboard_adapter.write_async("led.off_all")
+    haloboard_adapter.write_imidiate_script("led.off_all")
     
 def __led_off_single(index):
-    # atombit_adapter.write_async(("led.off_single", "(%s)" %(index,)))
-    atombit_adapter.write_imidiate_script(("led.off_single", "(%s)" %(index,)))
+    # haloboard_adapter.write_async(("led.off_single", "(%s)" %(index,)))
+    haloboard_adapter.write_imidiate_script(("led.off_single", "(%s)" %(index,)))
 
 #vibration motor
 def __vibration_motor_on(value):
-    atombit_adapter.write_async(("vibration_motor.on," "(%s)" %(value,)))
+    haloboard_adapter.write_async(("vibration_motor.on," "(%s)" %(value,)))
 
 def __vibration_motor_set_strength(value):
-    atombit_adapter.write_async(("vibration_motor.set_strength", "(%s)" %(value,)))
+    haloboard_adapter.write_async(("vibration_motor.set_strength", "(%s)" %(value,)))
 
 
 # music
 def __music_play_melody(name):
-    atombit_adapter.write_imidiate_script(("music.play_melody",  "('%s')" %(name,)))
+    haloboard_adapter.write_imidiate_script(("music.play_melody",  "('%s')" %(name,)))
 
 def __music_play_melody_to_stop(name):
-    atombit_adapter.write_imidiate_script(("music.play_melody_to_stop('%s')" %(name,)))
+    haloboard_adapter.write_imidiate_script(("music.play_melody_to_stop('%s')" %(name,)))
 
 
 def __music_play_tone(frequency, beat):
-    atombit_adapter.write_imidiate_script(("music.play_tone", "(%s, %s)" %(frequency, beat)))
+    haloboard_adapter.write_imidiate_script(("music.play_tone", "(%s, %s)" %(frequency, beat)))
 
 def __music_stop_sounds():
-    atombit_adapter.write_imidiate_script("music.stop_sounds")
+    haloboard_adapter.write_imidiate_script("music.stop_sounds")
 
 def __music_set_volume(volume):
-    atombit_adapter.write_async(("music.set_volume", "(%s)" %(volume, )))
+    haloboard_adapter.write_async(("music.set_volume", "(%s)" %(volume, )))
 
 
 def __music_get_volume():
-    ret = atombit_adapter.read_async("music.get_volume")
+    ret = haloboard_adapter.read_async("music.get_volume")
     if ret == None:
         return 0
     else:
         return ret
 
 def __music_change_volume(change_value):
-    atombit_adapter.write_async(("music.change_volume", "(%s)" %(change_value, )))
+    haloboard_adapter.write_async(("music.change_volume", "(%s)" %(change_value, )))
 
 # touchpad
 def __tp0_is_touched():
-    ret = atombit_adapter.read_async("touchpad0.is_touched")
+    ret = haloboard_adapter.read_async("touchpad0.is_touched")
     if ret == None:
         return False
     else:
         return True
 
 def __tp0_set_touch_threshold(value):
-    atombit_adapter.write_async(("touchpad0.set_touch_threshold", "(%s)" %(value, )))
+    haloboard_adapter.write_async(("touchpad0.set_touch_threshold", "(%s)" %(value, )))
 
 def __tp0_get_value():
-    ret = atombit_adapter.read_async("touchpad0.get_value")
+    ret = haloboard_adapter.read_async("touchpad0.get_value")
     if ret == None:
         return 0
     else:
         return ret
 
 def __tp1_is_touched():
-    ret = atombit_adapter.read_async("touchpad1.is_touched")
+    ret = haloboard_adapter.read_async("touchpad1.is_touched")
     if ret == None:
         return False
     else:
         return True
 
 def __tp1_set_touch_threshold(value):
-    atombit_adapter.write_async(("touchpad1.set_touch_threshold", "(%s)" %(value, )))
+    haloboard_adapter.write_async(("touchpad1.set_touch_threshold", "(%s)" %(value, )))
 
 def __tp1_get_value():
-    ret = atombit_adapter.read_async("touchpad1.get_value")
+    ret = haloboard_adapter.read_async("touchpad1.get_value")
     if ret == None:
         return 0
     else:
         return ret
 
 def __tp2_is_touched():
-    ret = atombit_adapter.read_async("touchpad2.is_touched")
+    ret = haloboard_adapter.read_async("touchpad2.is_touched")
     if ret == None:
         return False
     else:
         return True
 
 def __tp2_set_touch_threshold(value):
-    atombit_adapter.write_async(("touchpad2.set_touch_threshold", "(%s)" %(value, )))
+    haloboard_adapter.write_async(("touchpad2.set_touch_threshold", "(%s)" %(value, )))
 
 def __tp2_get_value():
-    ret = atombit_adapter.read_async("touchpad2.get_value")
+    ret = haloboard_adapter.read_async("touchpad2.get_value")
     if ret == None:
         return 0
     else:
         return ret
 
 def __tp3_is_touched():
-    ret = atombit_adapter.read_async("touchpad3.is_touched")
+    ret = haloboard_adapter.read_async("touchpad3.is_touched")
     if ret == None:
         return False
     else:
         return True
 
 def __tp3_set_touch_threshold(value):
-    atombit_adapter.write_async(("touchpad3.set_touch_threshold", "(%s)" %(value, )))
+    haloboard_adapter.write_async(("touchpad3.set_touch_threshold", "(%s)" %(value, )))
 
 def __tp3_get_value():
-    ret = atombit_adapter.read_async("touchpad3.get_value")
+    ret = haloboard_adapter.read_async("touchpad3.get_value")
     if ret == None:
         return 0
     else:
@@ -156,7 +156,7 @@ def __tp3_get_value():
 
 # microphone
 def __mic_get_loudness():
-    ret = atombit_adapter.read_async("microphone.get_loudness")
+    ret = haloboard_adapter.read_async("microphone.get_loudness")
     if ret == None:
         return 0
     else:
@@ -164,20 +164,20 @@ def __mic_get_loudness():
 
 # wifi
 def __wifi_start(ssid = "Maker-guest", password = "makeblock", mode = 1):
-    atombit_adapter.write_imidiate_script(("wifi.start", "(%s, %s, %s)" %(ssid, password, mode)))
+    haloboard_adapter.write_imidiate_script(("wifi.start", "(%s, %s, %s)" %(ssid, password, mode)))
 
 
 def __wifi_is_connected():
-    atombit_adapter.write_imidiate_script("wifi.is_connected")
+    haloboard_adapter.write_imidiate_script("wifi.is_connected")
 
 
 # speech recognition    
 def __speech_recognition_start(server = 0, language = 0, time = 5):
-    atombit_adapter.write_imidiate_script("speech_recognition.start", "(%d, %d, %d)" %(server, language, time))
+    haloboard_adapter.write_imidiate_script("speech_recognition.start", "(%d, %d, %d)" %(server, language, time))
 
 
 def __speech_recognition_get_result_code():
-    atombit_adapter.write_imidiate_script("speech_recognition.get_result_code")
+    haloboard_adapter.write_imidiate_script("speech_recognition.get_result_code")
     if ret == None:
         return ''
     else:
