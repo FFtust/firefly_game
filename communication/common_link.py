@@ -15,7 +15,9 @@ class phy_uart():
         self.write_lock = threading.Lock()
 
     def __del__(self):
-        self.close()
+        print('phy_uart del')
+        if self.ser.is_open:
+            self.close()
 
     def open(self):
         self.ser.port = self.com_port
@@ -30,13 +32,18 @@ class phy_uart():
                 self.ser.close()
 
     def write(self, frame):
+        if not self.ser.is_open:
+            return
+
         self.write_lock.acquire(1)
         # print("phy write frame is", frame)
         self.ser.write(frame)
         self.write_lock.release()
 
     def read(self, bytes_num = 1):
-        data = self.ser.read(bytes_num)
+        data = bytearray()
+        if self.ser.is_open:
+            data = self.ser.read(bytes_num)
         return data
 
 # define functions about protocol
@@ -67,6 +74,10 @@ class common_link():
         self.recv_bin_sem = threading.Lock()
         self.recv_bin_sem.acquire()
         self.protocol_cb = {}
+
+    def __del__(self):
+        self.phy.__del__()
+        print('common_link del')
 
     # Input a stream data, split stream to frame and save in frame_list
     def fsm(self, stream):
@@ -147,10 +158,14 @@ class common_link():
         self.phy.open()
         read_num = 1
         while True:
-            stream = self.phy.read(read_num)
-            if stream:
-                debug_print("read data is", stream)
-                read_num = self.fsm(stream)
+            try:
+                stream = self.phy.read(read_num)
+                if stream:
+                    debug_print("read data is", stream)
+                    read_num = self.fsm(stream)
+            except:
+                time.sleep(0.1)
+                print('serial closed')
 
     def recv(self):
         self.recv_bin_sem.acquire()

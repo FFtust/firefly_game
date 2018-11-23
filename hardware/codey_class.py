@@ -12,29 +12,29 @@ class codey():
     def __init__(self, port_info):
         # do initialize
         self.rename_apis()
-        self.codey_adapter = hd_adapter.adapter([port_info])
+        self.adapter = hd_adapter.adapter([port_info])
         self.__run_into_online_mode()
         self.__import_codey()
 
     # system process
     def __run_into_online_mode(self):
-        self.codey_adapter.write_bytes_directly(bytearray([0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x03, 0x10, 0xf4]))
+        self.adapter.write_bytes_directly(bytearray([0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x03, 0x10, 0xf4]))
         time.sleep(2)
 
     # import codey
     def __import_codey(self):
-        self.codey_adapter.write_str_directly("from codey import *")
+        self.adapter.write_str_directly("from codey import *")
 
     # battery 
     def __battery_get_voltage(self):
-        ret = self.codey_adapter.read_async("battery.get_voltage")
+        ret = self.adapter.read_async("battery.get_voltage")
         if ret == None:
             return 0
         else:
             return ret
 
     def __battery_get_percentage(self):
-        ret = self.codey_adapter.read_async("battery.get_percentage")
+        ret = self.adapter.read_async("battery.get_percentage")
         if ret == None:
             return 0
         else:
@@ -42,21 +42,21 @@ class codey():
 
     # button
     def __button_a_is_pressed(self):
-        ret = self.codey_adapter.read_async("button_a.is_pressed")
+        ret = self.adapter.read_async("button_a.is_pressed")
         if ret == None:
             return False
         else:
             return bool(ret)
 
     def __button_b_is_pressed(self):
-        ret = self.codey_adapter.read_async("button_b.is_pressed")
+        ret = self.adapter.read_async("button_b.is_pressed")
         if ret == None:
             return False
         else:
             return bool(ret)
 
     def __button_c_is_pressed(self):
-        ret = self.codey_adapter.read_async("button_c.is_pressed")
+        ret = self.adapter.read_async("button_c.is_pressed")
         if ret == None:
             return False
         else:
@@ -64,46 +64,46 @@ class codey():
         
     # display 
     def __display_show_image(self, image):
-        self.codey_adapter.write_async("display.show_image", "('%s', )" %(image, ))
+        self.adapter.write_async("display.show_image", "('%s', )" %(image, ))
 
     def __display_show(self, var, pos_x = None, pos_y = None, wait = True):
-        self.codey_adapter.write_async("display.show", "('%s', %s, %s, %s)" %(var, pos_x, pos_y, wait))
+        self.adapter.write_async("display.show", "('%s', %s, %s, %s)" %(var, pos_x, pos_y, wait))
 
     def __display_set_pixel(self, pos_x, pos_y, status):
-        self.codey_adapter.write_async("display.set_pixel", "(%s, %s, %s)" %(pos_x, pos_y, status))
+        self.adapter.write_async("display.set_pixel", "(%s, %s, %s)" %(pos_x, pos_y, status))
 
     def __display_get_pixel(self, pos_x, pos_y):
-        ret = self.codey_adapter.read_async("display.get_pixel", "(%s, %s)" %(pos_x, pos_y))
+        ret = self.adapter.read_async("display.get_pixel", "(%s, %s)" %(pos_x, pos_y))
         if ret == None:
             return False
         else:
             return bool(ret)
 
     def __display_toggle_pixel(self, pos_x, pos_y):
-        self.codey_adapter.write_async("display.toggle_pixel", "(%s, %s)" %(pos_x, pos_y))
+        self.adapter.write_async("display.toggle_pixel", "(%s, %s)" %(pos_x, pos_y))
 
     def __display_clear(self):
-        self.codey_adapter.write_async("display.clear",)
+        self.adapter.write_async("display.clear",)
 
     #led
     def __led_show(self, r, g, b):
-        self.codey_adapter.write_async("led.show", "(%s, %s, %s)" %(r, g, b))
+        self.adapter.write_async("led.show", "(%s, %s, %s)" %(r, g, b))
 
     def __led_set_red(self, val):
-        self.codey_adapter.write_async("led.set_red", "(%s)" %(val, ))
+        self.adapter.write_async("led.set_red", "(%s)" %(val, ))
 
     def __led_set_green(self, val):
-        self.codey_adapter.write_async("led.set_green", "(%s)" %(val, ))
+        self.adapter.write_async("led.set_green", "(%s)" %(val, ))
 
     def __led_set_blue(self, val):
-        self.codey_adapter.write_async("led.set_blue", "(%s)" %(val, ))
+        self.adapter.write_async("led.set_blue", "(%s)" %(val, ))
 
     def __led_off(self):
-        self.codey_adapter.write_async("led.off")
+        self.adapter.write_async("led.off")
 
     # light_sensor
     def __light_sensor_get_value(self):
-        ret = self.codey_adapter.read_async("light_sensor.get_value")
+        ret = self.adapter.read_async("light_sensor.get_value")
         if ret == None:
             return 0
         else:
@@ -111,7 +111,7 @@ class codey():
 
     # light_sensor
     def __sound_sensor_get_loudness(self):
-        ret = self.codey_adapter.read_async("sound_sensor.get_loudness")
+        ret = self.adapter.read_async("sound_sensor.get_loudness")
         if ret == None:
             return 0
         else:
@@ -119,7 +119,7 @@ class codey():
 
     # potentiometer
     def __potentiometer_get_value(self):
-        ret = self.codey_adapter.read_async("potentiometer.get_value")
+        ret = self.adapter.read_async("potentiometer.get_value")
         if ret == None:
             return 0
         else:
@@ -127,74 +127,74 @@ class codey():
 
     # speaker 
     def __speaker_stop_sounds(self):
-        self.codey_adapter.write_async("speaker.stop_sounds")
+        self.adapter.write_async("speaker.stop_sounds")
 
     def __speaker_set_volume(self, value):
-        self.codey_adapter.write_async("speaker.set_volume", '(%s)' %(value, ))
+        self.adapter.write_async("speaker.set_volume", '(%s)' %(value, ))
 
     def __speaker_get_volume(self):
-        ret = self.codey_adapter.read_async("speaker.get_volume")
+        ret = self.adapter.read_async("speaker.get_volume")
         if ret == None:
             return 0
         else:
             return ret
 
     def __speaker_change_volume(self, value):
-        self.codey_adapter.write_async("speaker.change_volume", '(%s)' %(value, ))
+        self.adapter.write_async("speaker.change_volume", '(%s)' %(value, ))
 
     def __speaker_set_tempo(self, value):
-        self.codey_adapter.write_async("speaker.set_tempo", '(%s)' %(value, ))
+        self.adapter.write_async("speaker.set_tempo", '(%s)' %(value, ))
 
     def __speaker_change_tempo(self, value):
-        self.codey_adapter.write_async("speaker.change_tempo", '(%s)' %(value, ))
+        self.adapter.write_async("speaker.change_tempo", '(%s)' %(value, ))
 
     def __speaker_get_tempo(self):
-        ret = self.codey_adapter.read_async("speaker.get_tempo")
+        ret = self.adapter.read_async("speaker.get_tempo")
         if ret == None:
             return 0
         else:
             return ret
 
     def __speaker_play_melody(self, sound_name, wait = False, off_t = 0.05):
-        self.codey_adapter.write_async("speaker.play_melody", "('%s', %s, %s)" %(sound_name, wait, off_t), update_flag = True)
+        self.adapter.write_async("speaker.play_melody", "('%s', %s, %s)" %(sound_name, wait, off_t), update_flag = True)
 
     def __speaker_play_melody_until_done(self, sound_name, wait = True, off_t = 0.05):
-        self.codey_adapter.write_async("speaker.play_melody_until_done", "('%s', %s, %s)" %(sound_name, wait, off_t), update_flag = True)
+        self.adapter.write_async("speaker.play_melody_until_done", "('%s', %s, %s)" %(sound_name, wait, off_t), update_flag = True)
 
     def __speaker_play_note(self, note, beat = None):
-        self.codey_adapter.write_async("speaker.play_note", "(%s, %s)" %(note, beat), update_flag = True)
+        self.adapter.write_async("speaker.play_note", "(%s, %s)" %(note, beat), update_flag = True)
 
 
     def __speaker_play_tone(self, frequency, time_ms = None):
-        self.codey_adapter.write_async("speaker.play_tone", "(%s, %s)" %(frequency, time_ms), update_flag = True)
+        self.adapter.write_async("speaker.play_tone", "(%s, %s)" %(frequency, time_ms), update_flag = True)
 
     def __speaker_rest(self, beat):
-        self.codey_adapter.write_async("speaker.play_tone", "(%s)" %(beat), update_flag = True)
+        self.adapter.write_async("speaker.play_tone", "(%s)" %(beat), update_flag = True)
 
     # motion sensor
     def __motion_sensor_get_roll(self):
-        ret = self.codey_adapter.read_async("motion_sensor.get_roll")
+        ret = self.adapter.read_async("motion_sensor.get_roll")
         if ret == None:
             return 0
         else:
             return ret
 
     def __motion_sensor_get_pitch(self):
-        ret = self.codey_adapter.read_async("motion_sensor.get_pitch")
+        ret = self.adapter.read_async("motion_sensor.get_pitch")
         if ret == None:
             return 0
         else:
             return ret
 
     def __motion_sensor_get_yaw(self):
-        ret = self.codey_adapter.read_async("motion_sensor.get_yaw")
+        ret = self.adapter.read_async("motion_sensor.get_yaw")
         if ret == None:
             return 0
         else:
             return ret
 
     def __motion_sensor_get_rotation(self, axis):
-        ret = self.codey_adapter.read_async("motion_sensor.get_rotation", '("%s")' %(axis, ))
+        ret = self.adapter.read_async("motion_sensor.get_rotation", '("%s")' %(axis, ))
         if ret == None:
             return 0
         else:
@@ -204,65 +204,65 @@ class codey():
         if not (axis in  index_dict):
             return 0
 
-        self.codey_adapter.write_async("motion_sensor.reset_rotation", '("%s")' %(axis, ))
+        self.adapter.write_async("motion_sensor.reset_rotation", '("%s")' %(axis, ))
 
 
     def __motion_sensor_is_shaked(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_shaked")
+        ret = self.adapter.read_async("motion_sensor.is_shaked")
         if ret == None:
             return False
         else:
             return ret
 
     def __motion_sensor_get_shake_strength(self):
-        ret = self.codey_adapter.read_async("motion_sensor.get_shake_strength")
+        ret = self.adapter.read_async("motion_sensor.get_shake_strength")
         if ret == None:
             return 0
         else:
             return ret
 
     def __motion_sensor_is_tilted_left(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_tilted_left")
+        ret = self.adapter.read_async("motion_sensor.is_tilted_left")
         if ret == None:
             return False
         else:
             return ret
 
     def __motion_sensor_is_tilted_right(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_tilted_right")
+        ret = self.adapter.read_async("motion_sensor.is_tilted_right")
         if ret == None:
             return False
         else:
             return ret
 
     def __motion_sensor_is_ears_up(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_ears_up")
+        ret = self.adapter.read_async("motion_sensor.is_ears_up")
         if ret == None:
             return False
         else:
             return ret
 
     def __motion_sensor_is_ears_down(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_ears_down")
+        ret = self.adapter.read_async("motion_sensor.is_ears_down")
         if ret == None:
             return False
         else:
             return ret
     def __motion_sensor_is_display_up(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_display_up")
+        ret = self.adapter.read_async("motion_sensor.is_display_up")
         if ret == None:
             return False
         else:
             return ret
 
     def __motion_sensor_is_display_down(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_display_down")
+        ret = self.adapter.read_async("motion_sensor.is_display_down")
         if ret == None:
             return False
         else:
             return ret
     def __motion_sensor_is_upright(self):
-        ret = self.codey_adapter.read_async("motion_sensor.is_upright")
+        ret = self.adapter.read_async("motion_sensor.is_upright")
         if ret == None:
             return False
         else:
@@ -273,7 +273,7 @@ class codey():
         if not (axis in  index_dict):
             return 0
 
-        ret = self.codey_adapter.read_async("motion_sensor.get_acceleration__" + + str(index_dict[axis]), '("%s")' %(axis, ))
+        ret = self.adapter.read_async("motion_sensor.get_acceleration__" + + str(index_dict[axis]), '("%s")' %(axis, ))
         if ret == None:
             return 0
         else:
@@ -284,13 +284,13 @@ class codey():
         if not (axis in  index_dict):
             return 0
 
-        ret = self.codey_adapter.read_async("motion_sensor.get_gyroscope__" + str(index_dict[axis]), '("%s")' %(axis, ))
+        ret = self.adapter.read_async("motion_sensor.get_gyroscope__" + str(index_dict[axis]), '("%s")' %(axis, ))
         if ret == None:
             return 0
         else:
             return ret
 
-    def rename_apis(self)
+    def rename_apis(self):
         # button 
         self.button_a = api_format()
         self.button_a.is_pressed = self.__button_a_is_pressed

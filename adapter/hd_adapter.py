@@ -12,6 +12,7 @@ WRITE_BUFFER_ENABLE = False
 WRITE_UPDATE_INTERVAL = 0.025
 
 def sync_delay(t = None):
+    return
     import time
     if t == None:
         time.sleep(0.025)
@@ -114,8 +115,9 @@ class adapter(object):
             self.exec_script_hash.start()
 
     def __del__(self):
+        print("adapter del")
         if self.phy_type == 'serial':
-            pass
+            self.common_link.__del__()
 
     def write_str_directly(self, script):
         self.common_link.phy.write(frame_package.create_frame(0x00, script))

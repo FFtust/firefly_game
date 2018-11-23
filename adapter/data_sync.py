@@ -72,7 +72,7 @@ class hardware_data():
             while not self.sensor_data[value_key].value_update_flag:
                 time.sleep(0.005)
 
-    def wait_value_first_update(self, value_key, max_wait_time = 500):
+    def wait_value_first_update(self, value_key, max_wait_time = 2000):
         max_count = max_wait_time // 50
         count = 0
         while not (value_key in self.sensor_data):
