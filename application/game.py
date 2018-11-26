@@ -3,7 +3,7 @@ import math
 import time
 from utils.common import *
 
-from application.game_adapter import screen_update_hardware
+from application.game_adapter import get_update_function
 from application.game_adapter import FACE_ROW, FACE_COLUMN, REFRESH_INTERVAL, SPRITE_NUM_MAX
 
 GAME_NOT_START = 0
@@ -446,7 +446,7 @@ class game_base():
             if self.back_ground_show:
                 self.face_buffer[i] |= self.back_ground[i]
         self.sema.release()
-        screen_update_hardware(self.face_buffer)
+        get_update_function()(self.face_buffer)
 
     def set_refresh_interval(self, val):
         self.refresh_interval = val
