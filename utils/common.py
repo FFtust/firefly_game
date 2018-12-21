@@ -1,14 +1,30 @@
 import time 
 import os
 
-BEBUG_ENABLE = 0
+PRINT_LEVEL_NONE = 0
+PRINT_LEVEL_INFO = 1
+PRINT_LEVEL_WAARN = 2
+PRINT_LEVEL_DEBUG = 3
+PRINT_LEVEL_VERBOSE = 4
 
-if BEBUG_ENABLE:
-    def debug_print(*args):
+print_level = PRINT_LEVEL_WAARN
+
+def verbose_print():
+    if print_level >= PRINT_LEVEL_VERBOSE:
         print(*args)
-else:
-    def debug_print(*args):
-        pass    
+
+def debug_print(*args):
+    if print_level >= PRINT_LEVEL_DEBUG:
+        print(*args)
+
+def warn_print(*args):
+    if print_level >= PRINT_LEVEL_WAARN:
+        print(*args)
+
+def info_print(*args):
+    if print_level >= PRINT_LEVEL_INFO:
+        print(*args)
+
 
 # check the range of number
 def num_range_check(num, min_n = None, max_n = None, to_range = True):

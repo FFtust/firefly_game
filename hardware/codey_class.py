@@ -3,6 +3,16 @@ import time
 from utils.common import *
 import adapter.hd_adapter as hd_adapter
 
+# define common commands
+ONLINE_MODE_ID = 0x01
+OFF_LINE_MODE_ID = 0x00
+
+RUN_TO_ONLINE_MODE_COMMAND = [0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x01, 0x0e, 0xf4]
+READ_MODE_COMMAND_ID = 0x0d
+READ_MODE_COMMAND =  [0xf3, 0xf5, 0x02, 0x00, 0x0d, 0x80, 0x8D, 0xf4]
+READ_VERSION_COMMAND_ID = 0x06
+READ_VERSION_COMMAND = [0xF3, 0xF4, 0x01, 0x00, 0x06, 0x06, 0xF4]
+
 # define online apis, each name of the apis is the same with offline's
 class api_format():
     def __init__(self):
@@ -11,8 +21,17 @@ class api_format():
 class codey():
     def __init__(self, port_info):
         # do initialize
-        self.rename_apis()
         self.adapter = hd_adapter.adapter([port_info])
+
+        self.current_mode = None
+        self.version = None
+        self.adapter.common_link.register_process_function(READ_VERSION_COMMAND_ID, self.version_protocol_parse)
+        self.adapter.common_link.register_process_function(READ_MODE_COMMAND_ID, self.mode_protocol_parse)
+
+        if self.get_device_version(1) == None:
+            warn_print(" can't get device version information ")
+
+        self.rename_apis()
         self.__run_into_online_mode()
         self.__import_codey()
 
@@ -364,3 +383,32 @@ class codey():
         self.motion_sensor.get_acceleration = self.__motion_sensor_get_acceleration
         self.motion_sensor.get_gyroscope = self.__motion_sensor_get_gyroscope
 
+    # other fiunctions
+    def version_protocol_parse(self, frame):
+        version_string = str(frame, "utf8")
+        warn_print("version bytes is %s, string is %s" %(frame, version_string))
+        self.version = version_string
+
+    def mode_protocol_parse(self, frame):
+        if frame[0] == 0x80:
+            self.current_mode = frame[1]
+            warn_print("mode bytes is %s, mode is %s" %(frame, self.current_mode))
+        else:
+            pass
+
+    def get_device_version(self, max_time_s):
+        self.version = None
+        self.adapter.write_bytes_directly(bytearray(READ_VERSION_COMMAND))
+        start = time.time()
+        while self.version == None and time.time() - start < max_time_s:
+            time.sleep(0.05)
+
+        return self.version
+
+    def get_device_current_mode(self, max_time_s):
+        self.current_mode = None
+        self.adapter.write_bytes_directly(bytearray(READ_MODE_COMMAND))
+        start = time.time()
+        while self.current_mode == None and time.time() - start < max_time_s:
+            time.sleep(0.05)
+        return self.current_mode
