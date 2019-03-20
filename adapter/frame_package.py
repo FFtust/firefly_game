@@ -6,7 +6,7 @@ from utils.common import *
 COMMON_PROTOCOL_HEAD = 0xF3
 COMMON_PROTOCOL_END = 0xF4
 
-ONLINE_CMD_ID = 0x10
+ONLINE_CMD_ID = 0x28
 PROTOCOL_SUBSCRIBE_ID = 0x29
 
 def __string0_package(string):

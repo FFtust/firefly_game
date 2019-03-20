@@ -6,11 +6,21 @@ from application.game_controller import *
 import time
 import random
 import hardware
+import threading
 
-haloboard = hardware.haloboard("COM29")
-haloboard.led.show_all(100, 0, 0)
-time.sleep(1)
-haloboard.led.show_all(100, 100, 0)
+haloboard = hardware.haloboard("COM34")
+# haloboard.led.show_all(100, 0, 0)
+def test():
+    while True:
+        if haloboard.button.is_pressed():
+            haloboard.led.show_all(100, 0, 0)
+        else:
+            # pass
+            haloboard.led.show_all(0, 0, 0)
+        time.sleep(0.01)
+
+th = threading.Thread(target = test, args = ())
+th.start()
 # codey = hardware.codey('COM28')
 
 # # regisster screen update

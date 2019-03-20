@@ -25,6 +25,16 @@ def info_print(*args):
     if print_level >= PRINT_LEVEL_INFO:
         print(*args)
 
+def wait_max_time(max_time_ms, conditions):
+    if type(conditions) != "list" and \
+       type(conditions) != "tuple":
+        conditions = [conditions]
+
+    start = time.time()
+    while time.time() - start < (max_time_ms / 1000):
+        for item in conditions:
+            if item():
+                break
 
 # check the range of number
 def num_range_check(num, min_n = None, max_n = None, to_range = True):

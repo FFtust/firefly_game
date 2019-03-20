@@ -5,13 +5,15 @@ import threading
 import time
 from utils.common import *
 
+SERIAL_TIMEOUT = 1
+
 # define physical channel functions
 class phy_uart():
     def __init__(self, port, baudrate):
         self.ser = None
         self.com_port = port
         self.baudrate = baudrate
-        self.ser = serial.Serial(None, self.baudrate, timeout = 0.2)
+        self.ser = serial.Serial(None, self.baudrate, timeout = SERIAL_TIMEOUT)
         self.write_lock = threading.Lock()
 
     def __del__(self):
@@ -22,7 +24,7 @@ class phy_uart():
     def open(self):
         self.ser.port = self.com_port
         self.ser.baudrate = self.baudrate
-        self.ser.write_timeout = 1
+        self.ser.write_timeout = SERIAL_TIMEOUT
         if not self.ser.is_open:
             self.ser.open()
 

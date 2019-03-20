@@ -49,7 +49,7 @@ class haloboard():
 
     # import firefly
     def __import_firefly(self):
-        self.adapter.write_str_directly("from haloboard import *")
+        self.adapter.write_str_directly("from halo import *", service_id = 0x02)
 
     # button
     def __button_is_pressed(self):
@@ -61,8 +61,8 @@ class haloboard():
 
     #led
     def __led_show_all(self, r, g, b):
-        # self.adapter.write_async("led.show_all", "(%s, %s, %s)" %(r, g, b))
-        self.adapter.write_imidiate_script("led.show_all", "(%s, %s, %s)" %(r, g, b))
+        self.adapter.write_async("led.show_all", "(%s, %s, %s)" %(r, g, b))
+        # self.adapter.write_imidiate_script("led.show_all", "(%s, %s, %s)" %(r, g, b))
 
     def __led_show_single(self, index, r , g, b):
         # self.adapter.write_async(("led.show_single", "(%s, %s, %s, %s)" %(index, r, g, b)))

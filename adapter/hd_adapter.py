@@ -8,8 +8,11 @@ from adapter.data_sync import hardware_data
 COM_PORT = "COM28"
 COM_BAUDRATE = 115200
 
-WRITE_BUFFER_ENABLE = False
+WRITE_BUFFER_ENABLE = True
 WRITE_UPDATE_INTERVAL = 0.025
+
+
+SERIAL_NUM_WRITE_WITHOUT_RESPONSE = 0x05
 
 def sync_delay(t = None):
     return
@@ -83,7 +86,7 @@ class exec_script_hash(object):
                         para_dict[value[0]] = value[1]
                         value[2] = False
 
-                # print('subscribe.up_para(%s)' %(para_dict, ))
+                print('subscribe.up_para(%s)' %(para_dict, ))
                 if para_dict != {}:
                     self.common_link.phy.write(frame_package.create_frame(0x01, ('subscribe.up_para(%s)' %(str(para_dict), )).replace(' ','')))
             time.sleep(self.interval)
@@ -119,8 +122,8 @@ class adapter(object):
         if self.phy_type == 'serial':
             self.common_link.__del__()
 
-    def write_str_directly(self, script):
-        self.common_link.phy.write(frame_package.create_frame(0x00, script))
+    def write_str_directly(self, script, service_id = 0x00):
+        self.common_link.phy.write(frame_package.create_frame(service_id, script))
         sync_delay()
 
     def write_sync(self, script):
@@ -140,9 +143,9 @@ class adapter(object):
 
         if not WRITE_BUFFER_ENABLE:
             if para == None:
-                self.common_link.phy.write(frame_package.create_frame(0x00, script + '()'))
+                self.common_link.phy.write(frame_package.create_frame(0x00, script + '()', SERIAL_NUM_WRITE_WITHOUT_RESPONSE))
             else:
-                self.common_link.phy.write(frame_package.create_frame(0x00, script + para))
+                self.common_link.phy.write(frame_package.create_frame(0x00, script + para, SERIAL_NUM_WRITE_WITHOUT_RESPONSE))
         else:
             hash_id = self.exec_script_hash.get_hash(t_script)
             if not hash_id:
@@ -168,10 +171,10 @@ class adapter(object):
             script = script[:-3]
 
         if para == None:
-            self.common_link.phy.write(frame_package.create_frame(0x00, script + '()'))
+            self.common_link.phy.write(frame_package.create_frame(0x00, script + '()', SERIAL_NUM_WRITE_WITHOUT_RESPONSE))
         else:
             # print("write_imidiate_script: %s" %(script + para))
-            self.common_link.phy.write(frame_package.create_frame(0x00, script + para))
+            self.common_link.phy.write(frame_package.create_frame(0x00, script + para, SERIAL_NUM_WRITE_WITHOUT_RESPONSE))
 
     def read_sync(self, script):
         sync_delay()
