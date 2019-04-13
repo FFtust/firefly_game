@@ -1,7 +1,7 @@
 import time
 
-from utils.common import *
-import adapter.hd_adapter as hd_adapter
+from firefly_online.utils.common import *
+import firefly_online.adapter.hd_adapter as hd_adapter
 
 READ_VERSION_COMMAND_ID = 0x06
 READ_VERSION_COMMAND = [0xF3, 0xF4, 0x01, 0x00, 0x06, 0x06, 0xF4]

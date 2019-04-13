@@ -1,10 +1,10 @@
 import threading
 import math
 import time
-from utils.common import *
+from firefly_online.utils.common import *
 
-from application.game_adapter import screen_update_hardware
-from application.game_adapter import FACE_ROW, FACE_COLUMN, REFRESH_INTERVAL, SPRITE_NUM_MAX
+from firefly_online.application.game_adapter import screen_update_hardware
+from firefly_online.application.game_adapter import FACE_ROW, FACE_COLUMN, REFRESH_INTERVAL, SPRITE_NUM_MAX
 
 GAME_NOT_START = 0
 GAME_READY = 1

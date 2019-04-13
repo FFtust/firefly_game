@@ -1,10 +1,10 @@
-from application.game import game_base
-from application.game import sprite_create
-from application.game import *
-from application.game_controller import *
-from application.game_driver import set_game_driver
+from firefly_online.application.game import game_base
+from firefly_online.application.game import sprite_create
+from firefly_online.application.game import *
+from firefly_online.application.game_controller import *
+from firefly_online.application.game_driver import set_game_driver
 
-import hardware
+import firefly_online.hardware
 import time
 import random
 

@@ -1,7 +1,7 @@
 import time
 import threading
-from utils.common import *
-from config import *
+from firefly_online.utils.common import *
+from firefly_online.config import *
 
 # config
 DATA_UPDATE_SYNC_LOCK_ENABLE = False

@@ -1,6 +1,6 @@
 import time
 
-from utils.common import *
+from firefly_online.utils.common import *
 
 # define online apis, each name of the apis is the same with offline
 class api_format():

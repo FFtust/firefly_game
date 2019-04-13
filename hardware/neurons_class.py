@@ -1,12 +1,12 @@
 import time
-from utils.common import *
+from firefly_online.utils.common import *
 
 # define online apis, each name of the apis is the same with offline's
 class api_format():
     def __init__(self):
         self.version = "v1.0"
 
-class neurons()
+class neurons():
     def __init__(self, device):
         self.rename_apis()
         self.adapter = device.adapter

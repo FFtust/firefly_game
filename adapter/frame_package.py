@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-  
 from struct import pack, unpack
-from config import *
-from utils.common import *
+from firefly_online.config import *
+from firefly_online.utils.common import *
 
 COMMON_PROTOCOL_HEAD = 0xF3
 COMMON_PROTOCOL_END = 0xF4

@@ -1,9 +1,9 @@
 import time
 import threading
 
-import communication.common_link as common_link
-import adapter.frame_package as frame_package
-from adapter.data_sync import hardware_data
+import firefly_online.communication.common_link as common_link
+import firefly_online.adapter.frame_package as frame_package
+from firefly_online.adapter.data_sync import hardware_data
 
 COM_PORT = "COM28"
 COM_BAUDRATE = 115200

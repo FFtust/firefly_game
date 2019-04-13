@@ -1,8 +1,8 @@
 import json
 import time
 
-from utils.common import *
-from hardware.codey import codey_adapter as neurons_adapter
+from firefly_online.utils.common import *
+from firefly_online.hardware.codey import codey_adapter as neurons_adapter
 
 # system process
 def __run_into_online_mode():

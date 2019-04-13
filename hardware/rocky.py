@@ -1,8 +1,8 @@
 import json
 import time
 
-from utilc.common import *
-from hardware.codey import codey_adapter as rocky_adapter
+from firefly_online.utilc.common import *
+from firefly_online.hardware.codey import codey_adapter as rocky_adapter
 
 # system process
 def __run_into_online_mode():

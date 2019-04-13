@@ -1,7 +1,7 @@
 # # coding:utf-8
-from application.game import *
-from application.game_adapter import *
-from application.game_controller import *
+from firefly_online.application.game import *
+from firefly_online.application.game_adapter import *
+from firefly_online.application.game_controller import *
 
 
 global func_list

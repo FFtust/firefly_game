@@ -1,0 +1,1 @@
+__all__ = ["game", "game_adapter", "game_colorful", "game_controller", "game_nc"]

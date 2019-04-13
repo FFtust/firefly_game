@@ -3,7 +3,7 @@
 import serial
 import threading
 import time
-from utils.common import *
+from firefly_online.utils.common import *
 
 SERIAL_TIMEOUT = 1
 

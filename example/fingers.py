@@ -1,12 +1,12 @@
 # # coding:utf-8
-from application.game import *
-from application.game_adapter import *
-from application.game_controller import *
-from application.game_driver import set_game_driver
+from firefly_online.application.game import *
+from firefly_online.application.game_adapter import *
+from firefly_online.application.game_controller import *
+from firefly_online.application.game_driver import set_game_driver
 
 import time
 import random
-import hardware
+import firefly_online.hardware
 
 codey = hardware.codey('COM28')
 

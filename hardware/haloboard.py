@@ -1,7 +1,7 @@
 import time
 
-from utils.common import *
-import adapter.hd_adapter as hd_adapter
+from firefly_online.utils.common import *
+import firefly_online.adapter.hd_adapter as hd_adapter
 
 # system process
 def __run_into_online_mode(t = None):
