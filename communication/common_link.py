@@ -38,7 +38,7 @@ class phy_uart():
             return
 
         self.write_lock.acquire(1)
-        # print("phy write frame is", frame)
+        print("phy write frame is", frame)
         self.ser.write(frame)
         self.write_lock.release()
 

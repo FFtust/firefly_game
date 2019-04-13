@@ -23,7 +23,7 @@ class neurons()
     def __led_panel_clear(self, index):
         neurons_adapter.write_async("led_panel.clear", '(%d)' %(index, )) 
 
-    def rename_apis(self)
+    def rename_apis(self):
         self.led_panel = api_format()
         self.led_panel.show_image = self.__led_panel_show_image
         self.led_panel.clear = self.__led_panel_clear

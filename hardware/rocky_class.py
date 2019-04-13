@@ -16,7 +16,7 @@ class rocky():
 
     # import rocky
     def __import_rocky(self):
-        self.adapter.write_str_directly("from rocky import *")
+        self.adapter.write_str_directly("from rocky import *", service_id = 0x02)
 
     def __rocky_stop(self):
         self.adapter.write_async("stop")

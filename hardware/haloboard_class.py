@@ -3,13 +3,6 @@ import time
 from utils.common import *
 import adapter.hd_adapter as hd_adapter
 
-# define common commands
-ONLINE_MODE_ID = 0x01
-OFF_LINE_MODE_ID = 0x00
-
-RUN_TO_ONLINE_MODE_COMMAND = [0xf3, 0xf6, 0x03, 0x00, 0x0d, 0x00, 0x01, 0x0e, 0xf4]
-READ_MODE_COMMAND_ID = 0x0d
-READ_MODE_COMMAND =  [0xf3, 0xf5, 0x02, 0x00, 0x0d, 0x80, 0x8D, 0xf4]
 READ_VERSION_COMMAND_ID = 0x06
 READ_VERSION_COMMAND = [0xF3, 0xF4, 0x01, 0x00, 0x06, 0x06, 0xF4]
 
@@ -24,28 +17,14 @@ class haloboard():
 
         self.current_mode = None
         self.version = None
-        self.adapter.common_link.register_process_function(READ_VERSION_COMMAND_ID, self.version_protocol_parse)
-        self.adapter.common_link.register_process_function(READ_MODE_COMMAND_ID, self.mode_protocol_parse)
-
-        if self.get_device_version(1) == None:
-            warn_print(" can't get device version information ")
+        # self.adapter.common_link.register_process_function(READ_VERSION_COMMAND_ID, self.version_protocol_parse)
 
         self.remane_apis()
-        self.__run_into_online_mode()
         self.__import_firefly()
 
     def __del__(self):
         print("haloboard del")
         self.adapter.__del__()
-
-    # system process
-    def __run_into_online_mode(self, t = None):
-        self.adapter.write_bytes_directly(bytearray(RUN_TO_ONLINE_MODE_COMMAND))
-        time.sleep(0.2)
-
-        for i in range(2):
-            if self.get_device_current_mode(3) != ONLINE_MODE_ID:
-                warn_print(" can't get device mode ")
 
     # import firefly
     def __import_firefly(self):
@@ -61,8 +40,8 @@ class haloboard():
 
     #led
     def __led_show_all(self, r, g, b):
-        self.adapter.write_async("led.show_all", "(%s, %s, %s)" %(r, g, b))
-        # self.adapter.write_imidiate_script("led.show_all", "(%s, %s, %s)" %(r, g, b))
+        # self.adapter.write_async("led.show_all", "(%s, %s, %s)" %(r, g, b))
+        self.adapter.write_imidiate_script("led.show_all", "(%s, %s, %s)" %(r, g, b))
 
     def __led_show_single(self, index, r , g, b):
         # self.adapter.write_async(("led.show_single", "(%s, %s, %s, %s)" %(index, r, g, b)))
@@ -368,13 +347,6 @@ class haloboard():
         warn_print("version bytes is %s, string is %s" %(frame, version_string))
         self.version = version_string
 
-    def mode_protocol_parse(self, frame):
-        if frame[0] == 0x80:
-            self.current_mode = frame[1]
-            warn_print("mode bytes is %s, mode is %s" %(frame, self.current_mode))
-        else:
-            pass
-
     def get_device_version(self, max_time_s):
         self.version = None
         self.adapter.write_bytes_directly(bytearray(READ_VERSION_COMMAND))
@@ -384,11 +356,4 @@ class haloboard():
 
         return self.version
 
-    def get_device_current_mode(self, max_time_s):
-        self.current_mode = None
-        self.adapter.write_bytes_directly(bytearray(READ_MODE_COMMAND))
-        start = time.time()
-        while self.current_mode == None and time.time() - start < max_time_s:
-            time.sleep(0.05)
-        return self.current_mode
 

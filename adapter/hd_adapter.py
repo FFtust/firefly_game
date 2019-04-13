@@ -86,7 +86,6 @@ class exec_script_hash(object):
                         para_dict[value[0]] = value[1]
                         value[2] = False
 
-                print('subscribe.up_para(%s)' %(para_dict, ))
                 if para_dict != {}:
                     self.common_link.phy.write(frame_package.create_frame(0x01, ('subscribe.up_para(%s)' %(str(para_dict), )).replace(' ','')))
             time.sleep(self.interval)
@@ -112,7 +111,8 @@ class adapter(object):
             time.sleep(1)
 
         # clear the buffer in lower computer
-        self.common_link.phy.write(frame_package.create_frame(0x00, "subscribe.restart()"))
+        # self.common_link.phy.write(frame_package.create_frame(0x00, "subscribe.restart()"))
+        
         if WRITE_BUFFER_ENABLE:
             self.exec_script_hash = exec_script_hash(self.common_link)
             self.exec_script_hash.start()

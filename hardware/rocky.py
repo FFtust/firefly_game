@@ -15,7 +15,7 @@ class api_format():
 
 # import rocky
 def __import_rocky():
-    rocky_adapter.write_str_directly("from rocky import *")
+    rocky_adapter.write_str_directly("from rocky import *", service_id = 0x02)
 
 def __get_reflected_light():
     ret = rocky_adapter.read_async("color_ir_sensor.get_reflected_light")

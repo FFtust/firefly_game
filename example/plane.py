@@ -2,13 +2,17 @@ from application.game import game_base
 from application.game import sprite_create
 from application.game import *
 from application.game_controller import *
+from application.game_driver import set_game_driver
 
-import hardware.codey as codey 
+import hardware
 import time
 import random
 
+codey = hardware.codey('COM28')
+
 score = 0
 game = game_base()
+set_game_driver([codey.display.show_image])
 
 # 飞机三种造型
 plane_s = '000000000000c060c000000000000000'

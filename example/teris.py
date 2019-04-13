@@ -1,13 +1,18 @@
-from application.game import game_base
-from application.game import sprite_create
+# # coding:utf-8
 from application.game import *
+from application.game_adapter import *
 from application.game_controller import *
+from application.game_driver import set_game_driver
 
-import hardware.codey as codey 
+from hardware.codey_class import codey
 import time
 import random
 
+codey = codey("COM28")
+
+
 score = 0
+set_game_driver([codey.display.show_image])
 game = game_base()
 a_s = '10101010000000000000000000000000'
 b_s = '10380000000000000000000000000000'

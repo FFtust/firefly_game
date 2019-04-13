@@ -42,7 +42,7 @@ class codey():
 
     # import codey
     def __import_codey(self):
-        self.adapter.write_str_directly("from codey import *")
+        self.adapter.write_str_directly("from codey import *", service_id = 0x02)
 
     # battery 
     def __battery_get_voltage(self):
